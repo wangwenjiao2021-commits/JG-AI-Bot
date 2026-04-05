@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Jumia智能客服</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: #f68b1e;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 500px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(246, 139, 30, 0.15);
+      overflow: hidden;
+      border: 1px solid #fdd9b5;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #f68b1e 0%, #f97316 100%);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+    }
+
+    .chat-header-title {
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    /* 隐藏原生 Coze 聊天窗口的某些元素 */
+    #coze-chat iframe {
+      display: none !important;
+    }
+
+    .coze-container {
+      padding: 0 !important;
+    }
+
+    /* 圆形头像样式 */
+    #coze-chat img,
+    #coze-chat .avatar,
+    #coze-chat .logo,
+    #coze-chat [class*="avatar"],
+    #coze-chat [class*="logo"] {
+      border-radius: 50% !important;
+    }
+
+    /* 尝试覆盖 Coze SDK 内的图片样式 */
+    #coze-chat >>> img {
+      border-radius: 50% !important;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Jumia 智能客服</h1>
+  <p>7×24 小时在线为您服务</p>
+</div>
+
+<div class="chat-container">
+  <div class="chat-header">
+    <img src="https://www.coze.cn/_next/image?url=https%3A%2F%2Fmdn.alipay.com%2Fcozepubshare%2F1714628808296.html&w=256&q=80" alt="客服头像">
+    <span class="chat-header-title">Jumia智能客服</span>
+  </div>
+  <div id="coze-chat"></div>
+</div>
+
+<!-- Coze SDK -->
+<script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
+
+<script>
+  new CozeWebSDK.WebChatClient({
+    config: {
+      bot_id: '7620402331527970831',
+    },
+    componentProps: {
+      title: 'Jumia智能客服',
+      chatInputPlaceholder: '请输入您的问题',
+      avatarStyle: { borderRadius: '50%' },
+      chatBubbleAvatarStyle: { borderRadius: '50%' },
+      showFileUpload: false,
+      showVoiceInput: false,
+      storeStartNewChatText: '开启新对话',
+    },
+    element: document.getElementById('coze-chat'),
+    auth: {
+      type: 'token',
+      token: 'pat_UmtBD9EBuGrXBUk14cyv2QUzrvaPovJrJfBxigIEl5SCZ9KdXYduZcffaltKoMy5',
+      onRefreshToken: function () {
+        return 'pat_UmtBD9EBuGrXBUk14cyv2QUzrvaPovJrJfBxigIEl5SCZ9KdXYduZcffaltKoMy5'
+      }
+    }
+  });
+
+  // 等待 SDK 加载后尝试修改头像为圆形
+  setTimeout(function() {
+    var iframe = document.querySelector('#coze-chat iframe');
+    if (iframe) {
+      var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      var avatars = iframeDoc.querySelectorAll('img, [class*="avatar"], [class*="logo"]');
+      avatars.forEach(function(img) {
+        img.style.borderRadius = '50%';
+      });
+    }
+  }, 3000);
+</script>
+
+</body>
+</html>
